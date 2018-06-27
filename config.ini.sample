@@ -1,0 +1,7 @@
+[calendar]
+url : <wordpress-url>
+day_line : 5
+
+[discord]
+token : <discord-token>
+server_id : <target-server-id>
