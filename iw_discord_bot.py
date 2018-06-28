@@ -107,6 +107,21 @@ async def setup_channel(client, title, message):
     new_chan = await client.create_channel(server, title)
     print("Post Description...")
     await client.send_message(new_chan, message)
+    message2 = """
+■ ご注意!!
+音声チャンネルは Study-Group01 です。入室時には意図せずマイクがオンのままになっていないかご確認をお願いします。
+http://bit.ly/2HWB9ZL
+進行に影響がある場合は一旦 AFK 部屋に移動させて頂く場合がありますのでその際はマイクをミュートにしつつ戻ってきてくだされば。
+
+■ 質問したいとき
+頭に "Q. " をつけてコメントしておいてくだされば。あとで主催者が拾います。
+
+■ 匿名で質問したいとき
+質問箱 BOT さんに "Q. " の付いた質問を投げるとチャンネルに匿名で投稿し直してくれます。
+勉強会中、みんなの前だとちょっと質問しづらいな‥って思ったら質問箱 BOT に "Q." が先頭についたメッセージを送ってください。
+http://bit.ly/2rjZyjL
+    """
+    await client.send_message(new_chan, message)
     print("OK.")
 
 @client.event
