@@ -122,6 +122,7 @@ http://bit.ly/2HWB9ZL
 http://bit.ly/2rjZyjL
     """
     await client.send_message(new_chan, message)
+    await client.delete_channel_permissions(new_chan, client.connection.user)
     print("OK.")
 
 @client.event
