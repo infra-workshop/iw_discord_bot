@@ -46,10 +46,10 @@ discord_server_id = inifile.get('discord',r'server_id')
 
 ## load today's events from wordpress callender
 def get_wp_callender(worpress_url):
-    sdt = datetime.now(JST)
-    sdt = sdt.replace(hour=calendar_day_line, minute=0, second=0, microsecond=0)
+    now = datetime.now(JST)
+    sdt = now.replace(hour=calendar_day_line, minute=0, second=0, microsecond=0)
     sdt = sdt.strftime('%Y/%m/%dT%H:%MZ')
-    edt = (datetime.now(JST) + timedelta(days=1))
+    edt = (now + timedelta(days=1))
     edt = edt.replace(hour=calendar_day_line-1, minute=59, second=59, microsecond=0)
     edt = edt.strftime('%Y/%m/%dT%H:%MZ')
     API_URI = 'https://' + worpress_url + '/?rest_route=/tribe/events/v1/events'
@@ -59,6 +59,16 @@ def get_wp_callender(worpress_url):
         print("error : " + str(response.status_code))
         return
     wss = json_load(response.text)
+
+    ## crop events because time value is ignored by wpapi
+    wk = wss['events']
+    wss['events'] = []
+    for ev in wk:
+        if int(ev['start_date_details']['day']) == now.day and int(ev['start_date_details']['hour']) > calendar_day_line:
+            wss['events'].append(ev)
+        if int(ev['start_date_details']['day']) != now.day and int(ev['start_date_details']['hour']) < calendar_day_line:
+            wss['events'].append(ev)
+
     return wss
 
 ################################
