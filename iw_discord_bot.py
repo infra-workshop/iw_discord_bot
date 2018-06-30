@@ -41,6 +41,10 @@ calendar_day_line = int(inifile.get('calendar',r'day_line'))
 discord_token = inifile.get('discord',r'token')
 discord_server_id = inifile.get('discord',r'server_id')
 
+def dprint(var):
+    with open(BASE_DIR + '/run.log','a') as f:
+        f.write(str(var) + '\n')
+
 ################################
 # Wordpress
 
@@ -56,7 +60,7 @@ def get_wp_callender(worpress_url):
     url = API_URI + "&start_date=" + sdt + "&end_date=" + edt
     response = httpget(url)
     if response.status_code != 200:
-        print("error : " + str(response.status_code))
+        dprint("error : " + str(response.status_code))
         return
     wss = json_load(response.text)
 
@@ -110,12 +114,12 @@ async def setup_channel(client, title, message):
     for channel in server.channels:
         if channel.type == discord.ChannelType.text:
             if channel.name == title:
-                print("already_created")
+                dprint("already_created")
                 return 0
 
-    print("Creating Channel...")
+    dprint("Creating Channel...")
     new_chan = await client.create_channel(server, title)
-    print("Post Description...")
+    dprint("Post Description...")
     await client.send_message(new_chan, message)
     message2 = """
 ■ ご注意!!
@@ -133,13 +137,12 @@ http://bit.ly/2rjZyjL
     """
     await client.send_message(new_chan, message)
     # await client.delete_channel_permissions(new_chan, client.connection.user)
-    print("OK.")
+    dprint("OK.")
 
 @client.event
 async def on_ready():
-    # print('Logged in as')
-    # print(client.user.name)
-    # print(client.user.id)
+    dprint('Logged in as : ' + client.user.name)
+    # dprint(client.user.id)
 
     # thread main
     evs = await get_events()
