@@ -101,13 +101,31 @@ async def get_events():
         description = p.sub("", e["description"])
         msg += unescape(description)
         event["description"] = msg
-
+        if "organizer" in e and len(e["organizer"]) > 0:
+            event["actor"] = e["organizer"][0]["organizer"]
+        else:
+            event["actor"] = ""
         ret.append(event)    
     return ret
 
 ## create discord text channel
 async def setup_channel(client, title, message):
     server = client.get_server(discord_server_id)
+    # check discord member
+    members = {}
+    mention = None
+    for mems in server.members:
+        members[mems.mention] = [mems.name,mems.display_name]
+    for k in members:   # ignore dupricate
+        if members[k][0] == members[k][1]:
+            members[k] = [members[k][0]]
+    for k in members:   # check spearker
+        if not mention is None:
+            break
+        for mem in members[k]:
+            if (actor in mem) or (mem in actor):
+                mention = k
+                break
     # parse for discord channel
     title = ("".join(regex.findall(title_regex,title))).lower()
     # check duplicate
@@ -116,7 +134,8 @@ async def setup_channel(client, title, message):
             if channel.name == title:
                 dprint("already_created")
                 return 0
-
+    if not mention is None:
+        message = "こちらは " + mention + " さん主催の勉強会チャンネルです。\n" + message
     dprint("Creating Channel...")
     new_chan = await client.create_channel(server, title)
     dprint("Post Description...")
@@ -147,7 +166,7 @@ async def on_ready():
     # thread main
     evs = await get_events()
     for ev in evs:
-        await setup_channel(client,ev["title"],ev["description"])        
+        await setup_channel(client,ev["title"],ev["description"], ev["actor"])        
     # end thread
     await client.close()
 
