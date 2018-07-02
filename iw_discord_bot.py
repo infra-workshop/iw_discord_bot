@@ -109,7 +109,7 @@ async def get_events():
     return ret
 
 ## create discord text channel
-async def setup_channel(client, title, message):
+async def setup_channel(client, title, message, actor):
     server = client.get_server(discord_server_id)
     # check discord member
     members = {}
