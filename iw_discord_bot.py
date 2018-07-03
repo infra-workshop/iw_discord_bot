@@ -12,7 +12,7 @@ from os.path import dirname, abspath
 from datetime import datetime, timedelta, timezone
 from requests import get as httpget
 from json import loads as json_load
-from xml.sax.saxutils import unescape
+from html import unescape
 
 ## static argment
 JST = timezone(timedelta(hours=+9), 'JST')
