@@ -21,7 +21,7 @@ BASE_DIR = dirname(abspath(__file__))
 ## regex-pattern for discord channel title
 title_regexs = [
     r'\p{Han}',r'\p{Katakana}',r'\p{Hiragana}',r'\p{Latin}',
-    r'\p{N}',r'\p{So}',r'\p{Pd}',r'ー',
+    r'\p{N}',r'\p{So}',r'\p{Pd}',r'-',r'ー',r'（',r'）',
     r'[\u00A2-\u00F7]',r'[\u2100-\u2BD1]',
     r'[\u0391-\u03C9]',r'[\u0401-\u0451]',
     r'[\u2010-\u2312]',r'[\u2500-\u254B]',
