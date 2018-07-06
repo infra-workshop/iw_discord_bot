@@ -123,9 +123,9 @@ async def setup_channel(client, title, message, actor):
     l = 0
     for k in members:
         for mem in members[k]:
-            if (actor in mem or mem in actor) and l < len(k):
+            if (actor in mem or mem in actor) and l < len(mem):
                 mention = k
-                l = len(k)
+                l = len(mem)
     # parse for discord channel
     title = ("".join(regex.findall(title_regex,title))).lower()
     # check duplicate
