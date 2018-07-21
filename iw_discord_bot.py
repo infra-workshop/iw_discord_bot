@@ -112,20 +112,21 @@ async def get_events():
 async def setup_channel(client, title, message, actor):
     server = client.get_server(discord_server_id)
     # check discord member
-    members = {}
     mention = None
-    for mems in server.members:
-        members[mems.mention] = [mems.name,mems.display_name]
-    for k in members:   # ignore dupricate
-        if members[k][0] == members[k][1]:
-            members[k] = [members[k][0]]
-    # check spearker
-    l = 0
-    for k in members:
-        for mem in members[k]:
-            if (actor in mem or mem in actor) and l < len(mem):
-                mention = k
-                l = len(mem)
+    if actor.strip() != "":
+        members = {}
+        for mems in server.members:
+            members[mems.mention] = [mems.name,mems.display_name]
+        for k in members:   # ignore dupricate
+            if members[k][0] == members[k][1]:
+                members[k] = [members[k][0]]
+        # check spearker
+        l = 0
+        for k in members:
+            for mem in members[k]:
+                if (actor in mem or mem in actor) and l < len(mem):
+                    mention = k
+                    l = len(mem)
     # parse for discord channel
     title = ("".join(regex.findall(title_regex,title))).lower()
     # check duplicate
