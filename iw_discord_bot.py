@@ -40,6 +40,7 @@ calendar_url = inifile.get('calendar',r'url')
 calendar_day_line = int(inifile.get('calendar',r'day_line'))
 discord_token = inifile.get('discord',r'token')
 discord_server_id = inifile.get('discord',r'server_id')
+discord_category_id = inifile.get('discord',r'category_id')
 
 def dprint(var):
     with open(BASE_DIR + '/run.log','a') as f:
@@ -116,12 +117,12 @@ async def get_events():
 
 ## create discord text channel
 async def setup_channel(client, title, message, actor):
-    server = client.get_server(discord_server_id)
+    server = await client.fetch_guild(discord_server_id)
     # check discord member
     mention = None
     if actor.strip() != "":
         members = {}
-        for mems in server.members:
+        async for mems in server.fetch_members():
             members[mems.mention] = [mems.name,mems.display_name]
         for k in members:   # ignore dupricate
             if members[k][0] == members[k][1]:
@@ -136,17 +137,20 @@ async def setup_channel(client, title, message, actor):
     # parse for discord channel
     title = ("".join(regex.findall(title_regex,title))).lower()
     # check duplicate
-    for channel in server.channels:
+    channels = await server.fetch_channels()
+    for channel in channels:
         if channel.type == discord.ChannelType.text:
             if channel.name == title:
                 dprint("already_created")
                 return 0
     if not mention is None:
         message = "こちらは " + mention + " さん主催の勉強会チャンネルです。\n" + message
+    if discord_category_id != "":
+        category_voice_channel = await server.fetch_channel(discord_category_id)
     dprint("Creating Channel...")
-    new_chan = await client.create_channel(server, title)
+    new_chan = await category_voice_channel.create_text_channel(title)
     dprint("Post Description...")
-    await client.send_message(new_chan, message)
+    await new_chan.send(message)
     message2 = """
 ■ ご注意!!
 音声チャンネルは Study-Group01 です。入室時には意図せずマイクがオンのままになっていないかご確認をお願いします。
@@ -161,7 +165,7 @@ http://bit.ly/2HWB9ZL
 勉強会中、みんなの前だとちょっと質問しづらいな‥って思ったら質問箱 BOT に "Q." が先頭についたメッセージを送ってください。
 http://bit.ly/2rjZyjL
     """
-    await client.send_message(new_chan, message2)
+    await new_chan.send(message2)
     # await client.delete_channel_permissions(new_chan, client.connection.user)
     dprint("OK.")
 
