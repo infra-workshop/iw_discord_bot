@@ -155,7 +155,7 @@ http://bit.ly/2HWB9ZL
 勉強会中、みんなの前だとちょっと質問しづらいな‥って思ったら質問箱 BOT に "Q." が先頭についたメッセージを送ってください。
 http://bit.ly/2rjZyjL
     """
-    await client.send_message(new_chan, message)
+    await client.send_message(new_chan, message2)
     # await client.delete_channel_permissions(new_chan, client.connection.user)
     dprint("OK.")
 
