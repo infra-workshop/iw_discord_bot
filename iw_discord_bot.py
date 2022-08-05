@@ -99,6 +99,7 @@ async def get_events():
         event["title"] = str(e["start_date_details"]["month"]) + str(e["start_date_details"]["day"]) + "-" + e["title"]
         msg = ""
         msg += e["title"] + "\n"
+        msg += "https://" + calendar_url + "/?p=" +  str(e["id"]) + "\n"
         msg += str(e["start_date_details"]["hour"]) + ":" + str(e["start_date_details"]["minutes"])
         msg += " 〜 "
         msg += str(e["end_date_details"]["hour"]) + ":" + str(e["end_date_details"]["minutes"]) + "\n"
