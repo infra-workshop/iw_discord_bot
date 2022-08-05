@@ -105,7 +105,7 @@ async def get_events():
             event["actor"] = e["organizer"][0]["organizer"]
         else:
             event["actor"] = ""
-        ret.append(event)    
+        ret.append(event)
     return ret
 
 ## create discord text channel
@@ -167,7 +167,7 @@ async def on_ready():
     # thread main
     evs = await get_events()
     for ev in evs:
-        await setup_channel(client,ev["title"],ev["description"], ev["actor"])        
+        await setup_channel(client,ev["title"],ev["description"], ev["actor"])
     # end thread
     await client.close()
 
