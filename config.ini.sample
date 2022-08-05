@@ -5,3 +5,4 @@ day_line : 5
 [discord]
 token : <discord-token>
 server_id : <target-server-id>
+category_id : <target-category-id>
