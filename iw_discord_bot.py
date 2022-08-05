@@ -79,7 +79,12 @@ def get_wp_callender(worpress_url):
 # Discord
 
 ## discord client object
-client = discord.Client()
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = False
+intents.typing = False
+intents.presences = False
+client = discord.Client(intents=intents)
 
 async def get_events():
     ## regex for remove htmltag
